@@ -9,13 +9,14 @@ A new Flutter project.
 
 # diferentes pantallas
 inicio
-![image](https://github.com/user-attachments/assets/29ce3770-6c35-45cc-b388-99f30a903f73)
+![image](https://github.com/user-attachments/assets/c0bac16c-f5e7-4494-a4eb-021583b2dfe7)
+
 configuracion
 ![image](https://github.com/user-attachments/assets/737511b7-8b5e-478d-9c22-96dbf88d414b)
 notificaciones
 ![image](https://github.com/user-attachments/assets/99dce20f-bd43-43b7-9cd8-8f914284e57a)
 perfil
-![image](https://github.com/user-attachments/assets/784309e7-f930-465b-b9e6-c9d02cba1f12)
+
 ayuda
 ![image](https://github.com/user-attachments/assets/7cb1e8cd-2539-48fd-92e2-abfe49bb6bfd)
 

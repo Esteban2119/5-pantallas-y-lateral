@@ -7,13 +7,17 @@ class Navbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
+        padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
             accountName: const Text("Esteban"),
             accountEmail: const Text("esteban@gmail.com.edu.ec"),
             currentAccountPicture: CircleAvatar(
               child: ClipOval(
-                child: Image.asset("images/leon3.jpg"),
+                child: Icon(
+                  Icons.person,
+                  size: 40,
+                ),
               ),
             ),
           ),

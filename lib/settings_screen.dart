@@ -1,8 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:menu_lateral/navbar.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
+
+  @override
+  _SettingsScreenState createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<Offset> _slideAnimation;
+  bool _showButtons = false; // Controla la visibilidad de los botones deslizables
+
+  @override
+  void initState() {
+    super.initState();
+    // Inicializar AnimationController
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1),
+    );
+
+    // Definir animación de deslizamiento
+    _slideAnimation = Tween<Offset>(begin: Offset(0, 0), end: Offset(1.5, 0)).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  // Función para mostrar un mensaje de alerta
+  void _showAlert(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Mensaje'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              child: Text('Cerrar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,124 +84,108 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
             ),
-            // Agregar el formulario de creación de cuenta aquí
-            CreateAccountScreen(),
+            // Carta de presentación
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      // Imagen de perfil
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundImage: AssetImage('assets/images/barou.jpg'), // Cambia la ruta a tu imagen
+                      ),
+                      const SizedBox(height: 10),
+                      // Nombre
+                      Text(
+                        'Esteban',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      // Información adicional
+                      Text(
+                        'Soy desarrollador de software y apasionado por la tecnología. Trabajo en proyectos relacionados con Flutter y desarrollo web.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey[700],
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      // Botones
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              // Acción del botón 1
+                              _showAlert('¡Botón 1 presionado!');
+                            },
+                            child: Text('Botón 1'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              // Acción del botón 2
+                              _showAlert('¡Botón 2 presionado!');
+                            },
+                            child: Text('Botón 2'),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      // Botones deslizantes
+                      SlideTransition(
+                        position: _slideAnimation,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                _showAlert('¡Botón 3 presionado!');
+                              },
+                              child: Text('Botón 3'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                _showAlert('¡Botón 4 presionado!');
+                              },
+                              child: Text('Botón 4'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            // Botón para iniciar la animación
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _showButtons = !_showButtons; // Alterna la visibilidad de los botones deslizables
+                });
+                if (_showButtons) {
+                  _animationController.forward(); // Inicia la animación de deslizamiento
+                } else {
+                  _animationController.reverse(); // Reversa la animación si se presiona otra vez
+                }
+              },
+              child: Text(_showButtons ? 'Ocultar Botones' : 'Deslizar Botones'),
+            ),
           ],
         ),
       ),
       drawer: const Navbar(),
-    );
-  }
-}
-
-class CreateAccountScreen extends StatefulWidget {
-  @override
-  _CreateAccountScreenState createState() => _CreateAccountScreenState();
-}
-
-class _CreateAccountScreenState extends State<CreateAccountScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-
-  // Función para validar el correo electrónico
-  String? _validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Por favor, ingrese un correo electrónico';
-    }
-    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-    if (!emailRegex.hasMatch(value)) {
-      return 'Ingrese un correo electrónico válido';
-    }
-    return null;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Text(
-            'CREACION DE USUARIO',
-            style: TextStyle(fontSize: 24, color: Colors.black),
-          ),
-          SizedBox(height: 30),
-          Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    hintText: 'Ingrese su Nombre',
-                    prefixIcon: Icon(Icons.person),
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, ingrese su nombre';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 15),
-                TextFormField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                    hintText: 'Ingrese un Correo',
-                    prefixIcon: Icon(Icons.email),
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: _validateEmail,
-                ),
-                SizedBox(height: 15),
-                TextFormField(
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    hintText: 'Contraseña',
-                    prefixIcon: Icon(Icons.lock),
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, ingrese una contraseña';
-                    } else if (value.length < 6) {
-                      return 'La contraseña debe tener al menos 6 caracteres';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context); // Volver atrás
-                      },
-                      child: Text('Atrás'),
-                    ),
-                    SizedBox(width: 20),
-                    ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Cuenta creada exitosamente')),
-                          );
-                        }
-                      },
-                      child: Text('Confirmar Usuario'),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

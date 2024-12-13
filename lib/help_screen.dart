@@ -1,33 +1,51 @@
 import 'package:flutter/material.dart';
-import 'package:menu_lateral/navbar.dart';
+import 'package:menu_lateral/services/firebase_service.dart'; // Asegúrate de importar el servicio
 
-class HelpScreen extends StatelessWidget {
+class HelpScreen extends StatefulWidget {
   const HelpScreen({super.key});
 
   @override
+  State<HelpScreen> createState() => _HelpScreenState();
+}
+
+class _HelpScreenState extends State<HelpScreen> {
+  TextEditingController nameController = TextEditingController(text: "");
+
+  @override
   Widget build(BuildContext context) {
+    // Recibir los argumentos
+    Map arguments = ModalRoute.of(context)?.settings.arguments as Map;
+    nameController.text = arguments['name'];
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Ayuda',
-          style: TextStyle(
-            color: Colors.white, // Color del texto en la AppBar
-            fontWeight: FontWeight.bold, // Negrita para destacar
-          ),
-        ),
-        backgroundColor: Colors.green, // Color de fondo de la AppBar
+        title: const Text('Editar Nombre'),
       ),
-      body: const Center(
-        child: Text(
-          'Pantalla de ayuda',
-          style: TextStyle(
-            color: Colors.blueGrey, // Color del texto del cuerpo
-            fontSize: 18, // Tamaño de fuente
-            fontWeight: FontWeight.w600, // Peso medio para resaltar
-          ),
+      body: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(
+                hintText: 'Actualice el nombre',
+              ),
+            ),
+            Text(
+              arguments['uid'], // Para verificar el id
+              style: const TextStyle(fontSize: 10),
+            ),
+            ElevatedButton(
+                onPressed: () async {
+                  await FirebaseService().updatePeople(arguments['uid'], nameController.text)
+                      .then((_) {
+                    Navigator.pop(context);  // Volver a la pantalla anterior
+                  });
+                },
+                child: const Text("Actualizar"))
+          ],
         ),
       ),
-      drawer: const Navbar(),
     );
   }
 }

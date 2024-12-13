@@ -16,6 +16,7 @@ configuracion
 notificaciones
 ![image](https://github.com/user-attachments/assets/99dce20f-bd43-43b7-9cd8-8f914284e57a)
 perfil
+![image](https://github.com/user-attachments/assets/f7695743-d9f4-4836-9ef4-81c74ed5656f)
 
 ayuda
 ![image](https://github.com/user-attachments/assets/7cb1e8cd-2539-48fd-92e2-abfe49bb6bfd)
